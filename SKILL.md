@@ -18,6 +18,27 @@ metadata: {"clawdbot":{"requires":{"anyBins":["python3","python"]}}}
 - LLM access via `OPENAI_API_KEY` or an OpenAI-compatible provider via `LITELLM_API_BASE` + `LITELLM_API_KEY`.
 - `git` is optional for bootstrap; otherwise `curl`/`wget` (or Python) is used to download the repo.
 
+## Mandatory workflow (follow step-by-step)
+1. **Clarify intent and scope**: Ask the user for:
+   - Topics of interest (or confirm defaults).
+   - Time window (hours) and timezone if relevant.
+   - Output mode: CLI JSON vs API server.
+   - Model/provider preference (OpenAI vs compatible proxy).
+2. **Confirm workspace path**: Ask where to clone/run. Default to `PROJECT_DIR="$HOME/agentic_paper_digest"` if the user doesn’t care. Never hardcode `/Users/...` paths.
+3. **Bootstrap the repo**: Run the bootstrap script (unless the repo already exists and the user says to skip).
+4. **Create or verify `.env`**:
+   - If `.env` is missing, create it from `.env.example` (in the repo), then ask the user to fill keys and preferences.
+   - Ensure at least one of `OPENAI_API_KEY` or `LITELLM_API_KEY` is set before running.
+5. **Collect or update topics**:
+   - Ask for the topics of interest if not provided.
+   - Update `config/topics.json` to match those topics (or use the API endpoints if running the server).
+6. **Run the pipeline**:
+   - Prefer `scripts/run_cli.sh` for one-off JSON output.
+   - Use `scripts/run_api.sh` only if polling or UI/API access is needed.
+7. **Report results**:
+   - Summarize run stats (`seen`, `kept`, window).
+   - If results are sparse, suggest increasing `WINDOW_HOURS`, `ARXIV_MAX_RESULTS`, or broadening topics.
+
 ## Get the code and install
 - Preferred: run the bootstrap helper script. It uses git when available or falls back to a zip download.
 
