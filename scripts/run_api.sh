@@ -1,7 +1,7 @@
 #!/usr/bin/env bash
 set -euo pipefail
 
-PROJECT_DIR="${PROJECT_DIR:-/Users/matanlevi/dev/agentic_paper_digest}"
+PROJECT_DIR="${PROJECT_DIR:-$HOME/agentic_paper_digest}"
 
 if [ ! -d "$PROJECT_DIR" ]; then
   echo "PROJECT_DIR not found: $PROJECT_DIR"

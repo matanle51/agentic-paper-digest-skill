@@ -28,7 +28,7 @@ bash "{baseDir}/scripts/bootstrap.sh"
 - Override the clone location by setting `PROJECT_DIR`.
 
 ```bash
-PROJECT_DIR="/Users/matanlevi/dev/agentic_paper_digest" bash "{baseDir}/scripts/bootstrap.sh"
+PROJECT_DIR="$HOME/agentic_paper_digest" bash "{baseDir}/scripts/bootstrap.sh"
 ```
 
 ## Run (CLI preferred)

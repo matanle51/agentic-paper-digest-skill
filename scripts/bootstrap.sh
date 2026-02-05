@@ -1,7 +1,7 @@
 #!/usr/bin/env bash
 set -euo pipefail
 
-PROJECT_DIR="${PROJECT_DIR:-/Users/matanlevi/dev/agentic_paper_digest}"
+PROJECT_DIR="${PROJECT_DIR:-$HOME/agentic_paper_digest}"
 REPO_URL="https://github.com/matanle51/agentic_paper_digest"
 ZIP_URL="https://github.com/matanle51/agentic_paper_digest/archive/refs/heads/main.zip"
 
