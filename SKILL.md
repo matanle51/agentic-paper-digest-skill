@@ -97,29 +97,26 @@ Config files live in `PROJECT_DIR/config`. Environment variables can be set in t
 ## Mandatory workflow (follow step-by-step)
 1. **Read existing configuration**:
    - Load `config/topics.json`, `config/settings.json`, and `config/affiliations.json` (if present).
-   - Note any current topic IDs, caps, and fetch limits before asking the user to change them.
-2. **Map user intent to configuration (ask these explicitly)**:
-   - **Topics of interest** → update `config/topics.json` (`topics[].id/label/description/keywords`, `max_per_topic`).
-   - **Time window (hours)** → set `WINDOW_HOURS` (or pass `--window-hours` to CLI).
-   - **Timezone** → set `APP_TZ`.
-   - **Sources to include** → pass `--sources arxiv,hf` in CLI (API mode uses defaults).
+   - Note current topic IDs, caps, and fetch limits before asking the user to change them.
+2. **Map user intent to configuration (ask only what’s needed)**:
+   - **Topics of interest** → update `config/topics.json` (`topics[].id/label/description/keywords`, `max_per_topic`).  
+     Show current defaults and ask whether to keep or change them.
+   - **Time window (hours)** → set `WINDOW_HOURS` (or pass `--window-hours` to CLI) **only if the user cares**; otherwise keep defaults.
+   - **Search scope** → set `ARXIV_CATEGORIES`, `ARXIV_MAX_RESULTS`, `ARXIV_PAGE_SIZE`, `MAX_CANDIDATES_PER_SOURCE`.  
+     Ask whether to keep defaults and show the current values.
    - **Model/provider** → set `OPENAI_API_KEY` *or* `LITELLM_API_KEY` (+ `LITELLM_API_BASE` if proxy), and set `LITELLM_MODEL_RELEVANCE`/`LITELLM_MODEL_SUMMARY`.
-   - **Quality vs cost** → adjust `LITELLM_TEMPERATURE_*` and `LITELLM_MAX_RETRIES`.
-   - **Search scope** → set `ARXIV_CATEGORIES`, `ARXIV_MAX_RESULTS`, `ARXIV_PAGE_SIZE`, `MAX_CANDIDATES_PER_SOURCE`.
-   - **Timeouts** → set `FETCH_TIMEOUT_S` and `REQUEST_TIMEOUT_S`.
-   - **Use PDF text** → set `ENABLE_PDF_TEXT=1` and ensure `PyMuPDF` is installed.
-   - **Affiliation biasing** → edit `config/affiliations.json`.
-   - **API UI access** → set `CORS_ORIGINS` if the UI is on a different origin.
+   - **API UI access** → set `CORS_ORIGINS` only if the user explicitly wants the UI on a different origin.
+   - **Do NOT ask by default**: timezone, quality vs cost, timeouts, PDF text, affiliation biasing, sources list. Use defaults unless the user requests changes.
 3. **Confirm workspace path**: Ask where to clone/run. Default to `PROJECT_DIR="$HOME/agentic_paper_digest"` if the user doesn’t care. Never hardcode `/Users/...` paths.
 4. **Bootstrap the repo**: Run the bootstrap script (unless the repo already exists and the user says to skip).
 5. **Create or verify `.env`**:
-   - If `.env` is missing, create it from `.env.example` (in the repo), then ask the user to fill keys and preferences.
+   - If `.env` is missing, create it from `.env.example` (in the repo), then ask the user to fill keys and any requested preferences.
    - Ensure at least one of `OPENAI_API_KEY` or `LITELLM_API_KEY` is set before running.
 6. **Apply config changes**:
    - Edit JSON files directly (or use `POST /api/topics` and `POST /api/settings` if running the API).
 7. **Run the pipeline**:
    - Prefer `scripts/run_cli.sh` for one-off JSON output.
-   - Use `scripts/run_api.sh` only if polling or UI/API access is needed.
+   - Use `scripts/run_api.sh` only if the user explicitly asks for UI/API access or polling.
 8. **Report results**:
    - Summarize run stats (`seen`, `kept`, window).
    - If results are sparse, suggest increasing `WINDOW_HOURS`, `ARXIV_MAX_RESULTS`, or broadening topics.
