@@ -1,8 +1,9 @@
 ---
-name: agentic-paper-digest
+name: agentic-paper-digest-skill
 description: Fetches and summarizes recent arXiv and Hugging Face papers with Agentic Paper Digest. Use when the user wants a paper digest, a JSON feed of recent papers, or to run the arXiv/HF pipeline.
+homepage: https://github.com/matanle51/agentic_paper_digest
 compatibility: Requires Python 3, network access, and either git or curl/wget for bootstrap. LLM access via OPENAI_API_KEY or LITELLM_API_KEY (OpenAI-compatible).
-metadata: {"openclaw":{"requires":{"anyBins":["python3","python"]}}}
+metadata: {"clawdbot":{"requires":{"anyBins":["python3","python"]}}}
 ---
 
 # Agentic Paper Digest
