@@ -95,17 +95,16 @@ Config files live in `PROJECT_DIR/config`. Environment variables can be set in t
 - `config/affiliations.json`: list of `{pattern, weight}` boosts applied by substring match over affiliations. Weights add up and are capped at 1.0. Invalid JSON disables boosts, so keep the file strict JSON (no trailing commas).
 
 ## Mandatory workflow (follow step-by-step)
-1. **Read existing configuration**:
+1. **You first MUST open and read the configuration from the github repo: https://github.com/matanle51/agentic_paper_digest you downloaded**:
    - Load `config/topics.json`, `config/settings.json`, and `config/affiliations.json` (if present).
    - Note current topic IDs, caps, and fetch limits before asking the user to change them.
-2. **Map user intent to configuration (ask only what’s needed)**:
+2. **ASK THE USER TO PROVIDE IT'S PREFERENCES ABOUT THE FOLLOWING (HELP THE USER)**:
    - **Topics of interest** → update `config/topics.json` (`topics[].id/label/description/keywords`, `max_per_topic`).  
      Show current defaults and ask whether to keep or change them.
-   - **Time window (hours)** → set `WINDOW_HOURS` (or pass `--window-hours` to CLI) **only if the user cares**; otherwise keep defaults.
-   - **Search scope** → set `ARXIV_CATEGORIES`, `ARXIV_MAX_RESULTS`, `ARXIV_PAGE_SIZE`, `MAX_CANDIDATES_PER_SOURCE`.  
+   - **Time window (hours)** → set `WINDOW_HOURS` (or pass `--window-hours` to CLI) **only if the user cares**; otherwise keep default to 24h.
+   - ASK THE USER TO FILL THE FOLLOWING PARAMETERS (explain the user why are their intent): `ARXIV_CATEGORIES`, `ARXIV_MAX_RESULTS`, `ARXIV_PAGE_SIZE`, `MAX_CANDIDATES_PER_SOURCE`.  
      Ask whether to keep defaults and show the current values.
    - **Model/provider** → set `OPENAI_API_KEY` *or* `LITELLM_API_KEY` (+ `LITELLM_API_BASE` if proxy), and set `LITELLM_MODEL_RELEVANCE`/`LITELLM_MODEL_SUMMARY`.
-   - **API UI access** → set `CORS_ORIGINS` only if the user explicitly wants the UI on a different origin.
    - **Do NOT ask by default**: timezone, quality vs cost, timeouts, PDF text, affiliation biasing, sources list. Use defaults unless the user requests changes.
 3. **Confirm workspace path**: Ask where to clone/run. Default to `PROJECT_DIR="$HOME/agentic_paper_digest"` if the user doesn’t care. Never hardcode `/Users/...` paths.
 4. **Bootstrap the repo**: Run the bootstrap script (unless the repo already exists and the user says to skip).
@@ -118,16 +117,17 @@ Config files live in `PROJECT_DIR/config`. Environment variables can be set in t
    - Prefer `scripts/run_cli.sh` for one-off JSON output.
    - Use `scripts/run_api.sh` only if the user explicitly asks for UI/API access or polling.
 8. **Report results**:
-   - Summarize run stats (`seen`, `kept`, window).
    - If results are sparse, suggest increasing `WINDOW_HOURS`, `ARXIV_MAX_RESULTS`, or broadening topics.
 
 ## Getting good results
-- Keep topics focused and mutually exclusive so the classifier can choose the right IDs.
+- Help the user define and keep topics focused and mutually exclusive so the classifier can choose the right IDs.
 - Use a stronger model for summaries than for relevance if quality matters.
+- If using openAI's model, defualy to gpt-5-mini for good tradeoff.
 - Increase `WINDOW_HOURS` or `ARXIV_MAX_RESULTS` when results are sparse, or lower them if results are too noisy.
 - Tune `ARXIV_CATEGORIES` to your research domains.
 - Enable PDF text (`ENABLE_PDF_TEXT=1`) when abstracts are too thin.
 - Use modest affiliation weights to bias ranking without swamping relevance.
+- BE PROACTIVE AND HELP THE USER TUNE THE SKILL FOR GOOD RESULTS!
 
 ## Troubleshooting
 - Port 8000 busy: run `bash "{baseDir}/scripts/stop_api.sh"` or pass `--port` to the API command.
